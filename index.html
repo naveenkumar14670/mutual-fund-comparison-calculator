@@ -3,584 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mutual Fund Comparison Calculator</title>
+    <title>Financial Calculators Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Base styles for the body */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6; /* Light gray background */
+            background-color: #f3f4f6;
             display: flex;
-            justify-content: center;
-            align-items: flex-start; /* Align to top for longer content on smaller screens */
+            flex-direction: column;
+            justify-content: space-between; /* Pushes footer to bottom */
+            align-items: center;
             min-height: 100vh;
-            padding: 20px; /* Base padding for smaller screens */
+            padding: 20px;
             box-sizing: border-box;
         }
 
-        /* Adjust body padding for larger screens */
-        @media (min-width: 640px) { /* Small screens and up */
-            body {
-                padding: 30px;
-                align-items: center; /* Center vertically on larger screens */
-            }
-        }
-        @media (min-width: 1024px) { /* Large screens and up */
-            body {
-                padding: 40px;
-            }
-        }
-
-        /* Container styling */
         .container {
             background-color: #ffffff;
             border-radius: 12px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            padding: 20px; /* Default padding for mobile */
-            max-width: 900px;
+            padding: 30px;
+            max-width: 600px;
             width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 20px; /* Default gap for mobile */
-        }
-        /* Adjust container padding and gap for larger screens */
-        @media (min-width: 640px) {
-            .container {
-                padding: 30px;
-                gap: 25px;
-            }
+            text-align: center;
+            margin-top: auto; /* Pushes container up, leaving space for footer */
+            margin-bottom: auto; /* Centers container vertically if space allows */
         }
 
-        /* Section title styling */
-        .section-title {
-            font-weight: 700;
-            font-size: 1.25rem; /* Default for mobile (text-xl equivalent) */
-            color: #1f2937;
-            border-bottom: 2px solid #e5e7eb;
-            padding-bottom: 8px;
-            margin-bottom: 15px;
+        .main-title {
+            font-weight: 800; /* Extra bold */
+            font-size: 2.5rem; /* Larger for impact */
+            color: #1a202c; /* Darker title */
+            margin-bottom: 25px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* Subtle shadow */
         }
-        /* Adjust section title for larger screens */
-        @media (min-width: 640px) {
-            .section-title {
-                font-size: 1.5rem; /* md:text-2xl equivalent */
-                padding-bottom: 10px;
+
+        .calculator-link {
+            display: block; /* Make buttons take full width */
+            background-color: #4f46e5; /* Indigo color */
+            color: #ffffff;
+            font-weight: 600;
+            padding: 15px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-bottom: 15px; /* Space between buttons */
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2); /* Shadow matching button color */
+            border: none; /* No default border */
+        }
+
+        .calculator-link:hover {
+            background-color: #4338ca; /* Darker indigo on hover */
+            transform: translateY(-2px); /* Slight lift effect */
+            box-shadow: 0 6px 15px rgba(79, 70, 229, 0.3);
+        }
+
+        .calculator-link:last-child {
+            margin-bottom: 0; /* No margin after the last button */
+        }
+
+        footer {
+            margin-top: auto; /* Pushes footer to the bottom */
+            padding: 20px;
+            color: #6b7280; /* Gray text for footer */
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        @media (max-width: 639px) { /* Adjustments for smaller screens */
+            .container {
+                padding: 20px;
+            }
+            .main-title {
+                font-size: 2rem;
                 margin-bottom: 20px;
             }
-        }
-
-        /* Input group styling */
-        .input-group label {
-            font-weight: 500;
-            color: #374151;
-            margin-bottom: 6px; /* Reduced margin for tighter spacing */
-            font-size: 0.9rem; /* Slightly smaller for mobile labels */
-        }
-        /* Adjust label font size for larger screens */
-        @media (min-width: 640px) {
-            .input-group label {
-                font-size: 1rem;
-                margin-bottom: 8px;
-            }
-        }
-
-        .input-group input, .input-group select {
-            width: 100%;
-            padding: 8px 10px; /* Smaller padding for mobile inputs */
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 0.95rem; /* Smaller font for mobile inputs */
-            color: #1f2937;
-            background-color: #f9fafb;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-        /* Adjust input padding and font size for larger screens */
-        @media (min-width: 640px) {
-            .input-group input, .input-group select {
-                padding: 10px 12px;
-                font-size: 1rem;
-            }
-        }
-        .input-group input:focus, .input-group select:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
-            outline: none;
-        }
-
-        /* Output box styling */
-        .output-box {
-            background-color: #ebf8ff;
-            border: 1px solid #90cdf4;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-            padding: 15px; /* Default padding for mobile */
-            margin-top: 10px;
-            transition: all 0.3s ease;
-        }
-        .output-box:hover {
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-        }
-        /* Adjust output box padding for larger screens */
-        @media (min-width: 640px) {
-            .output-box {
-                padding: 20px;
-                margin-top: 15px;
-            }
-        }
-
-        /* Output section heading inside output box */
-        .output-section-heading {
-            font-size: 1rem; /* Default for mobile */
-            font-weight: 600;
-            color: #2b6cb0;
-            border-bottom: 1px dashed #a0aec0;
-            padding-bottom: 6px;
-            margin-bottom: 10px;
-        }
-        /* Adjust heading font size for larger screens */
-        @media (min-width: 640px) {
-            .output-section-heading {
-                font-size: 1.1rem;
-                padding-bottom: 8px;
-                margin-bottom: 12px;
-            }
-        }
-
-        /* Individual output item styling */
-        .output-item {
-            background-color: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 8px 12px; /* Smaller padding for mobile */
-            margin-bottom: 6px; /* Smaller margin for mobile */
-            font-size: 0.875rem; /* Base font size (text-sm equivalent) */
-            color: #2a4365;
-            display: flex;
-            flex-wrap: wrap; /* Allow wrapping on small screens */
-            justify-content: space-between;
-            align-items: center;
-        }
-        .output-item:last-child {
-            margin-bottom: 0;
-        }
-        .output-item strong {
-            font-weight: 700;
-            color: #1f2937;
-            /* Ensure strong tags take full width if content wraps to next line */
-            flex-basis: auto; /* Default */
-            margin-right: 8px; /* Space between bold label and value */
-        }
-        .output-item span {
-            text-align: right; /* Align value to the right */
-            flex-grow: 1; /* Allow span to take remaining space */
-        }
-
-        /* Adjust output item padding and font size for larger screens */
-        @media (min-width: 640px) {
-            .output-item {
-                padding: 10px 15px;
-                margin-bottom: 8px;
-                font-size: 0.95rem; /* md:text-base equivalent */
-            }
-            .output-item strong {
-                flex-basis: auto; /* Reset to default */
-            }
-        }
-
-
-        /* Best fund output styling */
-        .best-fund-output {
-            font-size: 1.1rem; /* Default for mobile */
-            font-weight: 700;
-            color: #059669;
-            text-align: center;
-            margin-top: 20px;
-            padding: 15px; /* Smaller padding for mobile */
-            background-color: #d1fae5;
-            border-radius: 12px;
-            border: 2px solid #34d399;
-            box-shadow: 0 5px 15px rgba(52, 211, 153, 0.2);
-            transition: all 0.3s ease;
-        }
-        .best-fund-output:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(52, 211, 153, 0.3);
-        }
-        /* Adjust best fund output for larger screens */
-        @media (min-width: 640px) {
-            .best-fund-output {
-                font-size: 1.3rem;
-                margin-top: 25px;
-                padding: 18px;
-            }
-        }
-
-        /* Comparison result item styling */
-        .comparison-result-item {
-            font-size: 0.95rem; /* Default for mobile */
-            font-weight: 600;
-            color: #374151;
-            margin-bottom: 8px; /* Smaller margin for mobile */
-            padding: 6px 10px; /* Smaller padding for mobile */
-            background-color: #f7fafc;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-            display: flex;
-            flex-wrap: wrap; /* Allow wrapping on small screens */
-            justify-content: space-between;
-            align-items: center;
-        }
-        .comparison-result-item span {
-            color: #059669;
-            font-weight: 700;
-            text-align: right; /* Align value to the right */
-            flex-grow: 1; /* Allow span to take remaining space */
-        }
-        /* Adjust comparison result item for larger screens */
-        @media (min-width: 640px) {
-            .comparison-result-item {
-                font-size: 1.1rem;
-                margin-bottom: 10px;
-                padding: 8px 12px;
-            }
-        }
-
-        /* Common output section styling */
-        .common-output {
-            background-color: #f0e6fa;
-            border: 1px solid #b794f4;
-            border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-            padding: 20px; /* Default for mobile */
-        }
-        /* Adjust common output padding for larger screens */
-        @media (min-width: 640px) {
-            .common-output {
-                padding: 30px;
-            }
-        }
-        .common-output .section-title {
-            color: #6b46c1;
-            border-bottom-color: #d6bcfa;
-        }
-
-        /* Fund comparison section for desktop layout */
-        @media (min-width: 768px) {
-            .fund-comparison-section {
-                flex-direction: row;
-                gap: 30px;
-            }
-            .fund-card {
-                flex: 1;
+            .calculator-link {
+                padding: 12px 20px;
+                font-size: 0.95rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Mutual Fund Comparison Calculator</h1>
+<div class="container">
+    <h1 class="main-title">Financial Calculators</h1>
+    <nav>
+        <a href="Calculators/mutual-funds-comparison-calculator.html" class="calculator-link">Mutual Funds Comparison Calculator</a>
+        <a href="Calculators/inflation-adjusted-amount-calculator.html" class="calculator-link">Inflation Adjusted Amount Calculator</a>
+    </nav>
+</div>
 
-        <!-- Common Inputs -->
-        <div class="common-inputs bg-gray-50 p-6 rounded-lg border border-gray-200">
-            <h2 class="section-title">Common Inputs</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="input-group flex flex-col">
-                    <label for="incomeTaxSlab">Income Tax Slab</label>
-                    <select id="incomeTaxSlab" class="rounded-lg">
-                        <option value="0.10">10%</option>
-                        <option value="0.20">20%</option>
-                        <option value="0.30">30%</option>
-                    </select>
-                </div>
-                <div class="input-group flex flex-col">
-                    <label for="amountInvested">Amount Invested (₹)</label>
-                    <input type="number" id="amountInvested" value="100000" min="0" class="rounded-lg">
-                </div>
-            </div>
-        </div>
-
-        <!-- Fund Specific Inputs -->
-        <div class="fund-comparison-section flex flex-col md:flex-row gap-6">
-            <!-- Fund 1 -->
-            <div class="fund-card bg-blue-50 p-6 rounded-lg border border-blue-200">
-                <h2 class="section-title text-blue-800">Fund 1 Details</h2>
-                <div class="input-group flex flex-col mb-4">
-                    <label for="fund1Name">Fund Name</label>
-                    <input type="text" id="fund1Name" value="Fund A" class="rounded-lg">
-                </div>
-                <div class="input-group flex flex-col mb-4">
-                    <label for="fund1ExpectedReturns">Expected Returns (%)</label>
-                    <input type="number" id="fund1ExpectedReturns" value="15" min="0" step="0.1" class="rounded-lg">
-                </div>
-                <div class="input-group flex flex-col mb-4">
-                    <label for="fund1STCG">STCG Tax Rate</label>
-                    <select id="fund1STCG" class="rounded-lg">
-                        <option value="20">20%</option>
-                        <option value="slab">Slab Rates</option>
-                    </select>
-                </div>
-                <div class="input-group flex flex-col mb-4">
-                    <label for="fund1LTCG">LTCG Tax Rate</label>
-                    <select id="fund1LTCG" class="rounded-lg">
-                        <option value="12.5">12.5%</option>
-                        <option value="slab">Slab Rates</option>
-                    </select>
-                </div>
-
-                <!-- Fund 1 Output -->
-                <div class="output-box" id="fund1Output">
-                    <p class="output-section-heading">Calculated Tax for Fund 1:</p>
-                    <div class="output-item"><strong>Expected Returns:</strong> <span id="fund1TotalReturnsLabel">₹0.00</span></div>
-                    <div class="output-item"><strong>Total amount before tax:</strong> <span id="fund1TotalAmountBeforeTax">₹0.00</span></div>
-                    <div class="output-item"><strong>STCG Tax:</strong> <span id="fund1CalculatedSTCG">₹0.00</span></div>
-                    <div class="output-item"><strong>LTCG Tax (Gains &le; ₹1.25L):</strong> <span id="fund1CalculatedLTCG_le125k">₹0.00</span></div>
-                    <div class="output-item"><strong>LTCG Tax (Gains &gt; ₹1.25L):</strong> <span id="fund1CalculatedLTCG_gt125k">₹0.00</span></div>
-                    <div class="output-item"><strong>Total amount after STCG tax:</strong> <span id="fund1TotalAmountAfterSTCG">₹0.00</span></div>
-                    <div class="output-item"><strong>Total amount after LTCG Tax (Gains &le; ₹1.25L):</strong> <span id="fund1TotalAmountAfterLTCG_le125k">₹0.00</span></div>
-                    <div class="output-item"><strong>Total amount after LTCG Tax (Gains &gt; ₹1.25L):</strong> <span id="fund1TotalAmountAfterLTCG_gt125k">₹0.00</span></div>
-                </div>
-            </div>
-
-            <!-- Fund 2 -->
-            <div class="fund-card bg-green-50 p-6 rounded-lg border border-green-200">
-                <h2 class="section-title text-green-800">Fund 2 Details</h2>
-                <div class="input-group flex flex-col mb-4">
-                    <label for="fund2Name">Fund Name</label>
-                    <input type="text" id="fund2Name" value="Fund B" class="rounded-lg">
-                </div>
-                <div class="input-group flex flex-col mb-4">
-                    <label for="fund2ExpectedReturns">Expected Returns (%)</label>
-                    <input type="number" id="fund2ExpectedReturns" value="18" min="0" step="0.1" class="rounded-lg">
-                </div>
-                <div class="input-group flex flex-col mb-4">
-                    <label for="fund2STCG">STCG Tax Rate</label>
-                    <select id="fund2STCG" class="rounded-lg">
-                        <option value="20">20%</option>
-                        <option value="slab">Slab Rates</option>
-                    </select>
-                </div>
-                <div class="input-group flex flex-col mb-4">
-                    <label for="fund2LTCG">LTCG Tax Rate</label>
-                    <select id="fund2LTCG" class="rounded-lg">
-                        <option value="12.5">12.5%</option>
-                        <option value="slab">Slab Rates</option>
-                    </select>
-                </div>
-
-                <!-- Fund 2 Output -->
-                <div class="output-box" id="fund2Output">
-                    <p class="output-section-heading">Calculated Tax for Fund 2:</p>
-                    <div class="output-item"><strong>Expected Returns:</strong> <span id="fund2TotalReturnsLabel">₹0.00</span></div>
-                    <div class="output-item"><strong>Total amount before tax:</strong> <span id="fund2TotalAmountBeforeTax">₹0.00</span></div>
-                    <div class="output-item"><strong>STCG Tax:</strong> <span id="fund2CalculatedSTCG">₹0.00</span></div>
-                    <div class="output-item"><strong>LTCG Tax (Gains &le; ₹1.25L):</strong> <span id="fund2CalculatedLTCG_le125k">₹0.00</span></div>
-                    <div class="output-item"><strong>LTCG Tax (Gains &gt; ₹1.25L):</strong> <span id="fund2CalculatedLTCG_gt125k">₹0.00</span></div>
-                    <div class="output-item"><strong>Total amount after STCG tax:</strong> <span id="fund2TotalAmountAfterSTCG">₹0.00</span></div>
-                    <div class="output-item"><strong>Total amount after LTCG Tax (Gains &le; ₹1.25L):</strong> <span id="fund2TotalAmountAfterLTCG_le125k">₹0.00</span></div>
-                    <div class="output-item"><strong>Total amount after LTCG Tax (Gains &gt; ₹1.25L):</strong> <span id="fund2TotalAmountAfterLTCG_gt125k">₹0.00</span></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Common Output -->
-        <div class="common-output bg-purple-50 p-6 rounded-lg border border-purple-200">
-            <h2 class="section-title text-purple-800">Comparison Result</h2>
-            <p id="bestFundSTCG" class="comparison-result-item">Best Fund as per STCG Tax: <span></span></p>
-            <p id="bestFundLTCG_le125k" class="comparison-result-item">Best Fund as per LTCG Tax (Gains &le; ₹1.25L): <span></span></p>
-            <p id="bestFundLTCG_gt125k" class="comparison-result-item">Best Fund as per LTCG Tax (Gains &gt; ₹1.25L): <span></span></p>
-            <div id="bestFundName" class="best-fund-output">
-                Please enter details to compare funds.
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Function to format currency
-        function formatCurrency(amount) {
-            return `₹${amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-        }
-
-        // Main calculation function
-        function calculateTaxes() {
-            // Get common inputs
-            const incomeTaxSlab = parseFloat(document.getElementById('incomeTaxSlab').value);
-            const amountInvested = parseFloat(document.getElementById('amountInvested').value);
-
-            // Get fund 1 inputs
-            const fund1Name = document.getElementById('fund1Name').value;
-            const fund1ExpectedReturns = parseFloat(document.getElementById('fund1ExpectedReturns').value);
-            const fund1STCGOption = document.getElementById('fund1STCG').value;
-            const fund1LTCGOption = document.getElementById('fund1LTCG').value;
-
-            // Get fund 2 inputs
-            const fund2Name = document.getElementById('fund2Name').value;
-            const fund2ExpectedReturns = parseFloat(document.getElementById('fund2ExpectedReturns').value);
-            const fund2STCGOption = document.getElementById('fund2STCG').value;
-            const fund2LTCGOption = document.getElementById('fund2LTCG').value;
-
-            // --- Helper function to calculate tax for a single fund ---
-            function calculateFundTax(fundDetails) {
-                const totalReturns = fundDetails.amountInvested * (fundDetails.expectedReturns / 100);
-                const totalAmountBeforeTax = fundDetails.amountInvested + totalReturns;
-
-                // Calculate STCG Tax
-                let stcgRate;
-                if (fundDetails.stcgOption === '20') {
-                    stcgRate = 0.20;
-                } else { // slab
-                    stcgRate = fundDetails.incomeTaxSlab;
-                }
-                const calculatedSTCGTax = totalReturns * stcgRate;
-                const totalAmountAfterSTCG = totalAmountBeforeTax - calculatedSTCGTax;
-
-                // Calculate LTCG Tax
-                let ltcgRate;
-                let exemptionAmountForLTCG12_5 = 0; // Exemption specifically for 12.5% LTCG option
-
-                if (fundDetails.ltcgOption === '12.5') {
-                    ltcgRate = 0.125;
-                    // As per user's request, for 12.5% LTCG, apply 1.25 lakhs exemption
-                    exemptionAmountForLTCG12_5 = 125000;
-                } else { // slab
-                    ltcgRate = fundDetails.incomeTaxSlab;
-                }
-
-                // LTCG tax assuming total gains <= 1.25 lakhs (₹1,25,000)
-                let calculatedLTCG_le125k;
-                if (fundDetails.ltcgOption === '12.5') {
-                    // Apply exemption and tax the remainder
-                    calculatedLTCG_le125k = Math.max(0, totalReturns - exemptionAmountForLTCG12_5) * ltcgRate;
-                } else { // slab rates
-                    // For slab rates, apply directly
-                    calculatedLTCG_le125k = totalReturns * ltcgRate;
-                }
-                calculatedLTCG_le125k = Math.max(0, calculatedLTCG_le125k); // Ensure tax is not negative
-                const totalAmountAfterLTCG_le125k = totalAmountBeforeTax - calculatedLTCG_le125k;
-
-
-                // LTCG tax assuming total gains > 1.25 lakhs (₹1,25,000)
-                // No exemption applied here as per previous request, directly multiply by rate.
-                let calculatedLTCG_gt125k;
-                calculatedLTCG_gt125k = totalReturns * ltcgRate;
-                calculatedLTCG_gt125k = Math.max(0, calculatedLTCG_gt125k); // Ensure tax is not negative
-                const totalAmountAfterLTCG_gt125k = totalAmountBeforeTax - calculatedLTCG_gt125k;
-
-
-                return {
-                    totalReturns: totalReturns,
-                    totalAmountBeforeTax: totalAmountBeforeTax,
-                    stcgTax: calculatedSTCGTax,
-                    ltcgTax_le125k: calculatedLTCG_le125k,
-                    ltcgTax_gt125k: calculatedLTCG_gt125k,
-                    totalAmountAfterSTCG: totalAmountAfterSTCG,
-                    totalAmountAfterLTCG_le125k: totalAmountAfterLTCG_le125k,
-                    totalAmountAfterLTCG_gt125k: totalAmountAfterLTCG_gt125k,
-                    totalTax_gt125k_scenario: calculatedSTCGTax + calculatedLTCG_gt125k // Used for best fund comparison (keeping this for consistency, though overall best fund below will use after-tax amount)
-                };
-            }
-
-            // Calculate for Fund 1
-            const fund1Results = calculateFundTax({
-                incomeTaxSlab,
-                amountInvested,
-                expectedReturns: fund1ExpectedReturns,
-                stcgOption: fund1STCGOption,
-                ltcgOption: fund1LTCGOption
-            });
-
-            // Update Fund 1 output
-            document.getElementById('fund1TotalReturnsLabel').textContent = `${formatCurrency(fund1Results.totalReturns)}`;
-            document.getElementById('fund1TotalAmountBeforeTax').textContent = `${formatCurrency(fund1Results.totalAmountBeforeTax)}`;
-            document.getElementById('fund1CalculatedSTCG').textContent = `${formatCurrency(fund1Results.stcgTax)}`;
-            document.getElementById('fund1CalculatedLTCG_le125k').textContent = `${formatCurrency(fund1Results.ltcgTax_le125k)}`;
-            document.getElementById('fund1CalculatedLTCG_gt125k').textContent = `${formatCurrency(fund1Results.ltcgTax_gt125k)}`;
-            document.getElementById('fund1TotalAmountAfterSTCG').textContent = `${formatCurrency(fund1Results.totalAmountAfterSTCG)}`;
-            document.getElementById('fund1TotalAmountAfterLTCG_le125k').textContent = `${formatCurrency(fund1Results.totalAmountAfterLTCG_le125k)}`;
-            document.getElementById('fund1TotalAmountAfterLTCG_gt125k').textContent = `${formatCurrency(fund1Results.totalAmountAfterLTCG_gt125k)}`;
-
-
-            // Calculate for Fund 2
-            const fund2Results = calculateFundTax({
-                incomeTaxSlab,
-                amountInvested,
-                expectedReturns: fund2ExpectedReturns,
-                stcgOption: fund2STCGOption,
-                ltcgOption: fund2LTCGOption
-            });
-
-            // Update Fund 2 output
-            document.getElementById('fund2TotalReturnsLabel').textContent = `${formatCurrency(fund2Results.totalReturns)}`;
-            document.getElementById('fund2TotalAmountBeforeTax').textContent = `${formatCurrency(fund2Results.totalAmountBeforeTax)}`;
-            document.getElementById('fund2CalculatedSTCG').textContent = `${formatCurrency(fund2Results.stcgTax)}`;
-            document.getElementById('fund2CalculatedLTCG_le125k').textContent = `${formatCurrency(fund2Results.ltcgTax_le125k)}`;
-            document.getElementById('fund2CalculatedLTCG_gt125k').textContent = `${formatCurrency(fund2Results.ltcgTax_gt125k)}`;
-            document.getElementById('fund2TotalAmountAfterSTCG').textContent = `${formatCurrency(fund2Results.totalAmountAfterSTCG)}`;
-            document.getElementById('fund2TotalAmountAfterLTCG_le125k').textContent = `${formatCurrency(fund2Results.totalAmountAfterLTCG_le125k)}`;
-            document.getElementById('fund2TotalAmountAfterLTCG_gt125k').textContent = `${formatCurrency(fund2Results.totalAmountAfterLTCG_gt125k)}`;
-
-            // Determine Overall Best Fund (based on highest total amount after LTCG Tax for > 1.25L gains scenario)
-            const bestFundElement = document.getElementById('bestFundName');
-            if (fund1Results.totalAmountAfterLTCG_gt125k > fund2Results.totalAmountAfterLTCG_gt125k) {
-                bestFundElement.textContent = `Best Overall Fund: ${fund1Name}`;
-                bestFundElement.className = 'best-fund-output bg-green-100 text-green-700 border-green-300';
-            } else if (fund2Results.totalAmountAfterLTCG_gt125k > fund1Results.totalAmountAfterLTCG_gt125k) {
-                bestFundElement.textContent = `Best Overall Fund: ${fund2Name}`;
-                bestFundElement.className = 'best-fund-output bg-green-100 text-green-700 border-green-300';
-            } else {
-                bestFundElement.textContent = `Both funds have similar after-tax outcomes in the >₹1.25L gains scenario.`;
-                bestFundElement.className = 'best-fund-output bg-yellow-100 text-yellow-700 border-yellow-300';
-            }
-
-            // Determine Best Fund as per STCG Tax (Highest total amount after STCG)
-            const bestFundSTCGElement = document.getElementById('bestFundSTCG').querySelector('span');
-            if (fund1Results.totalAmountAfterSTCG > fund2Results.totalAmountAfterSTCG) {
-                bestFundSTCGElement.textContent = fund1Name;
-                bestFundSTCGElement.style.color = '#059669'; // Green color for the winner
-            } else if (fund2Results.totalAmountAfterSTCG > fund1Results.totalAmountAfterSTCG) {
-                bestFundSTCGElement.textContent = fund2Name;
-                bestFundSTCGElement.style.color = '#059669'; // Green color for the winner
-            } else {
-                bestFundSTCGElement.textContent = 'Both are similar';
-                bestFundSTCGElement.style.color = '#f59e0b'; // Yellow color for similar
-            }
-
-            // Determine Best Fund as per LTCG Tax (Gains <= ₹1.25L) (Highest total amount after LTCG)
-            const bestFundLTCG_le125kElement = document.getElementById('bestFundLTCG_le125k').querySelector('span');
-            if (fund1Results.totalAmountAfterLTCG_le125k > fund2Results.totalAmountAfterLTCG_le125k) {
-                bestFundLTCG_le125kElement.textContent = fund1Name;
-                bestFundLTCG_le125kElement.style.color = '#059669';
-            } else if (fund2Results.totalAmountAfterLTCG_le125k > fund1Results.totalAmountAfterLTCG_le125k) {
-                bestFundLTCG_le125kElement.textContent = fund2Name;
-                bestFundLTCG_le125kElement.style.color = '#059669';
-            } else {
-                bestFundLTCG_le125kElement.textContent = 'Both are similar';
-                bestFundLTCG_le125kElement.style.color = '#f59e0b';
-            }
-
-            // Determine Best Fund as per LTCG Tax (Gains > ₹1.25L) (Highest total amount after LTCG)
-            const bestFundLTCG_gt125kElement = document.getElementById('bestFundLTCG_gt125k').querySelector('span');
-            if (fund1Results.totalAmountAfterLTCG_gt125k > fund2Results.totalAmountAfterLTCG_gt125k) {
-                bestFundLTCG_gt125kElement.textContent = fund1Name;
-                bestFundLTCG_gt125kElement.style.color = '#059669';
-            } else if (fund2Results.totalAmountAfterLTCG_gt125k > fund1Results.totalAmountAfterLTCG_gt125k) {
-                bestFundLTCG_gt125kElement.textContent = fund2Name;
-                bestFundLTCG_gt125kElement.style.color = '#059669';
-            } else {
-                bestFundLTCG_gt125kElement.textContent = 'Both are similar';
-                bestFundLTCG_gt125kElement.style.color = '#f59e0b';
-            }
-        }
-
-        // Add event listeners to all input fields to trigger recalculation on change
-        document.addEventListener('DOMContentLoaded', () => {
-            const inputs = document.querySelectorAll('input[type="number"], input[type="text"], select');
-            inputs.forEach(input => {
-                input.addEventListener('input', calculateTaxes);
-                input.addEventListener('change', calculateTaxes); // For select elements
-            });
-            // Initial calculation on page load
-            calculateTaxes();
-        });
-    </script>
+<footer>
+    &copy; 2025 Naveen Kumar Anagandula
+</footer>
 </body>
 </html>
