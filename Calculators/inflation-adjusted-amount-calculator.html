@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inflation Adjusted Amount Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f3f4f6; /* Light gray background */
+      display: flex;
+      justify-content: center;
+      align-items: flex-start; /* Align to top for longer content on smaller screens */
+      min-height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    @media (min-width: 640px) {
+      body {
+        padding: 30px;
+        align-items: center;
+      }
+    }
+    @media (min-width: 1024px) {
+      body {
+        padding: 40px;
+      }
+    }
+
+    .container {
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      max-width: 600px; /* Adjusted max-width for this tool */
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    @media (min-width: 640px) {
+      .container {
+        padding: 30px;
+        gap: 25px;
+      }
+    }
+
+    .section-title {
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: #1f2937;
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+    }
+    @media (min-width: 640px) {
+      .section-title {
+        font-size: 1.5rem;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+      }
+    }
+
+    .input-group label {
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+    }
+    @media (min-width: 640px) {
+      .input-group label {
+        font-size: 1rem;
+        margin-bottom: 8px;
+      }
+    }
+
+    .input-group input, .input-group select { /* Added select here */
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: #1f2937;
+      background-color: #f9fafb;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    @media (min-width: 640px) {
+      .input-group input, .input-group select { /* Added select here */
+        padding: 10px 12px;
+        font-size: 1rem;
+      }
+    }
+    .input-group input:focus, .input-group select:focus { /* Added select here */
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+      outline: none;
+    }
+
+    .output-box {
+      background-color: #e0f2fe;
+      border: 1px solid #93c5fd;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      padding: 15px;
+      margin-top: 10px;
+      transition: all 0.3s ease;
+    }
+    .output-box:hover {
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    }
+    @media (min-width: 640px) {
+      .output-box {
+        padding: 20px;
+        margin-top: 15px;
+      }
+    }
+
+    .output-item {
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 10px 15px;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+      color: #2a4365;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .output-item:last-child {
+      margin-bottom: 0;
+    }
+    .output-item strong {
+      font-weight: 700;
+      color: #1f2937;
+    }
+    .output-item span {
+      text-align: right;
+      flex-grow: 1;
+      color: #059669; /* Green for calculated values */
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Inflation Adjusted Amount Calculator</h1>
+
+  <!-- Inputs -->
+  <div class="common-inputs bg-gray-50 p-6 rounded-lg border border-gray-200">
+    <h2 class="section-title">Financial Goal Inputs</h2>
+    <div class="grid grid-cols-1 gap-6">
+      <div class="input-group flex flex-col">
+        <label for="amountNeededToday">Amount needed as per today's price (₹)</label>
+        <input type="number" id="amountNeededToday" value="1000000" min="0">
+      </div>
+      <div class="grid grid-cols-2 gap-4"> <!-- Grid for Period and Years/Months -->
+        <div class="input-group flex flex-col">
+          <label for="investmentPeriod">Period of investment</label>
+          <select id="investmentPeriod" class="rounded-lg">
+            <option value="years">Years</option>
+            <option value="months">Months</option>
+          </select>
+        </div>
+        <div class="input-group flex flex-col">
+          <label id="yearsToGoLabel" for="yearsToGo">Years to go</label>
+          <input type="number" id="yearsToGo" value="10" min="0" step="1">
+        </div>
+      </div>
+      <div class="input-group flex flex-col">
+        <label for="inflationRate">Inflation (%)</label>
+        <input type="number" id="inflationRate" value="6" min="0" step="0.1">
+      </div>
+      <div class="input-group flex flex-col">
+        <label for="expectedROI">Expected return on investment (%)</label>
+        <input type="number" id="expectedROI" value="12" min="0" step="0.1">
+      </div>
+    </div>
+  </div>
+
+  <!-- Outputs -->
+  <div class="output-box">
+    <h2 class="section-title">Calculated Values</h2>
+    <div class="output-item">
+      <strong>Inflation adjusted amount needed:</strong>
+      <span id="inflationAdjustedAmount">₹0.00</span>
+    </div>
+    <div class="output-item">
+      <strong>Monthly investment needed till then:</strong>
+      <span id="monthlyInvestmentNeeded">₹0.00</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Function to format currency
+  function formatCurrency(amount) {
+    return `₹${amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  }
+
+  // Elements
+  const amountNeededTodayInput = document.getElementById('amountNeededToday');
+  const yearsToGoInput = document.getElementById('yearsToGo');
+  const yearsToGoLabel = document.getElementById('yearsToGoLabel');
+  const investmentPeriodSelect = document.getElementById('investmentPeriod');
+  const inflationRateInput = document.getElementById('inflationRate');
+  const expectedROIInput = document.getElementById('expectedROI');
+
+  // Function to update the label for 'years to go' based on dropdown selection
+  function updateYearsToGoLabel() {
+    const selectedPeriod = investmentPeriodSelect.value;
+    if (selectedPeriod === 'months') {
+      yearsToGoLabel.textContent = 'Months to go';
+    } else {
+      yearsToGoLabel.textContent = 'Years to go';
+    }
+  }
+
+  // Main calculation function
+  function calculateInflationAndSIP() {
+    const amountNeededToday = parseFloat(amountNeededTodayInput.value);
+    let periodValue = parseFloat(yearsToGoInput.value);
+    const selectedPeriodType = investmentPeriodSelect.value;
+    const inflationRate = parseFloat(inflationRateInput.value) / 100; // Convert to decimal
+    const expectedROI = parseFloat(expectedROIInput.value) / 100; // Convert to decimal
+
+    let actualYearsToGo = periodValue;
+
+    // Convert months to years if 'Months' is selected
+    if (selectedPeriodType === 'months') {
+      actualYearsToGo = periodValue / 12;
+    }
+
+    // 1. Calculate Inflation Adjusted Amount Needed
+    let inflationAdjustedAmount = amountNeededToday * Math.pow((1 + inflationRate), actualYearsToGo);
+    if (isNaN(inflationAdjustedAmount) || !isFinite(inflationAdjustedAmount)) {
+      inflationAdjustedAmount = 0;
+    }
+    document.getElementById('inflationAdjustedAmount').textContent = formatCurrency(inflationAdjustedAmount);
+
+    // 2. Calculate Monthly Investment Needed (SIP)
+    let monthlyInvestmentNeeded = 0;
+    if (actualYearsToGo > 0 && expectedROI > 0) {
+      const numberOfMonths = actualYearsToGo * 12;
+      const monthlyInterestRate = expectedROI / 12;
+
+      // Future Value of Annuity formula, rearranged to solve for Payment (P)
+      // FV = P * [((1 + r)^n - 1) / r] * (1 + r) -- for payments at the beginning of the period (common for SIP)
+      // P = FV / ([((1 + r)^n - 1) / r] * (1 + r))
+      const factor = (Math.pow((1 + monthlyInterestRate), numberOfMonths) - 1) / monthlyInterestRate;
+      monthlyInvestmentNeeded = inflationAdjustedAmount / (factor * (1 + monthlyInterestRate));
+
+      if (isNaN(monthlyInvestmentNeeded) || !isFinite(monthlyInvestmentNeeded) || monthlyInvestmentNeeded < 0) {
+        monthlyInvestmentNeeded = 0;
+      }
+    } else if (actualYearsToGo === 0 && amountNeededToday > 0) {
+      monthlyInvestmentNeeded = 0;
+    }
+
+    document.getElementById('monthlyInvestmentNeeded').textContent = formatCurrency(monthlyInvestmentNeeded);
+  }
+
+  // Add event listeners
+  document.addEventListener('DOMContentLoaded', () => {
+    // Initial label update
+    updateYearsToGoLabel();
+
+    // Event listeners for inputs to trigger recalculation and label update
+    amountNeededTodayInput.addEventListener('input', calculateInflationAndSIP);
+    yearsToGoInput.addEventListener('input', calculateInflationAndSIP);
+    inflationRateInput.addEventListener('input', calculateInflationAndSIP);
+    expectedROIInput.addEventListener('input', calculateInflationAndSIP);
+
+    investmentPeriodSelect.addEventListener('change', () => {
+      updateYearsToGoLabel(); // Update label when dropdown changes
+      calculateInflationAndSIP(); // Recalculate when dropdown changes
+    });
+
+    // Initial calculation on page load
+    calculateInflationAndSIP();
+  });
+</script>
+</body>
+</html>
